@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const { Schema } = require("zod");
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     firstName: String,
@@ -21,9 +20,10 @@ const accountSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model("User", userSchema);
-const Account = mongoose.model("Account", accountSchema);
-module.exports({
-    User,
+const User = mongoose.model('User', userSchema);
+const Account = mongoose.model('Account', accountSchema);
+
+module.exports = {
+       User,
     Account
-});
+};

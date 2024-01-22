@@ -1,10 +1,10 @@
-const express = require("express")
+const express = require("express");
 const route = express.Router();
-const {User} = require("../db");
+const { User, Account} = require("../db");
 const zod = require("zod");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
-const authMiddleware =  require("../middleware")
+const {authMiddleware} =  require("../middleware")
 
 const signupSchema = zod.object({
     username : zod.string(),
@@ -43,10 +43,14 @@ route.post("/signup", async (req, res) => {
         userId
     }, JWT_SECRET);
 
+    await Account.create({
+        userId,
+        balance: 1+Math.random()*10000
+    });
     res.json({
         message: "User created successfully",
         token: token
-    })
+    }); 
 });
 
 const signinBody = zod.object({
@@ -54,7 +58,7 @@ const signinBody = zod.object({
 	password: zod.string()
 })
 
-route.post("/signin", authMiddleware, async (req, res) => {
+route.post("/signin", async (req, res) => {
     const { success } = signinBody.safeParse(req.body)
     if (!success) {
         return res.status(411).json({
@@ -88,10 +92,10 @@ const updateBody = zod.object({
 	password: zod.string().optional(),
     firstName: zod.string().optional(),
     lastName: zod.string().optional(),
-})
+});
 
 route.put("/", authMiddleware, async (req, res) => {
-    const { success } = updateBody.safeParse(req.body)
+    const { success } = updateBody.safeParse(req.body);
     if (!success) {
         res.status(411).json({
             message: "Error while updating information"
@@ -104,11 +108,10 @@ route.put("/", authMiddleware, async (req, res) => {
 
     res.json({
         message: "Updated successfully"
-    });
+    })
 });
- 
 
-route.get("/bulk", async (req, res) => {
+route.get("/bulk", authMiddleware, async (req, res) => {
     const filter = req.query.filter || "";
 
     const users = await User.find({
@@ -121,6 +124,7 @@ route.get("/bulk", async (req, res) => {
                 "$regex": filter
             }
         }]
+
     })
 
     res.json({
@@ -131,4 +135,56 @@ route.get("/bulk", async (req, res) => {
             _id: user._id
         }))
     })
-})
+});
+
+module.exports = route;
+// route.get("/bulk", async (req, res) => {
+//     const filter = req.query.filter || "";
+
+//     const users = await User.find({
+//         $or: [{
+//             firstName: filter
+//         }, {
+//             lastName: filter
+//         }]
+//     })
+
+//     res.json({
+//         user: users.map(user => ({
+//             username: user.username,
+//             firstName: user.firstName,
+//             lastName: user.lastName,
+//             _id: user._id
+//         }))
+//     })
+// })
+// route.get("/bulk" , async (req,res) => {
+// const filter = req.query.filter || "";
+
+// const try1 = await User.find({firstName : filter});
+// const try2 = await User.find({lastName : filter});
+
+//     if(try1 != null){
+//     res.status(200).json({
+//         user: try1.map((user) => ({
+//             username: user.username,
+//             firstName: user.firstName,
+//             lastName: user.lastName,
+//             _id: user._id
+//         }))
+//     });
+//   } else if(try2 != null){
+//     res.status(200).json({
+//         user: try2.map((user) => ({
+//             username: user.username,
+//             firstName: user.firstName,
+//             lastName: user.lastName,
+//             _id: user._id
+//         }))
+//     });
+//   } else{
+//     res.status(404).json({
+//         msg: "User not found"
+//     })
+//   }   
+// })
