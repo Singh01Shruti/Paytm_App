@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil"
-import { searchUser, usersAtomFamily } from "../store/users"
+import { searchUser, usersAtomFamily, userId } from "../store/users"
 import { useState } from "react";
 import axios from "axios";
 import { signInAtom } from "../store/signIn";
@@ -8,6 +8,7 @@ export default function Transfer(){
 const input = useRecoilValue(searchUser);
 const user = useRecoilValue(usersAtomFamily(input));
 const signIn = useRecoilValue(signInAtom)
+const id = useRecoilValue(userId);
 const [amount, setAmount] = useState(0);
 
     return (
@@ -21,11 +22,13 @@ const [amount, setAmount] = useState(0);
                 const config = {
                     headers: { Authorization: `Bearer ${signIn['token']}` }
                 };
-                const res = await axios.post("http://localhost:3000/api/vi/account/transfer", config ,{
-                    to : user._id,
+
+               
+                const res = await axios.post("http://localhost:3000/api/vi/account/transfer",{
+                    to : id,
                     amount: amount
-                })
-                console.log(res);
+                }, config);
+                alert("Transferred Successfully");
             }}>Initiate Transfer</button>
         </div>
     )

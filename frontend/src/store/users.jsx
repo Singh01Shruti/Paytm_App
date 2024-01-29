@@ -2,6 +2,7 @@ import { atom, atomFamily, selectorFamily} from "recoil";
 import { signInAtom } from "./signIn";
 import axios from "axios";
 
+
 export const searchUser = atom({
     key : "searchUser",
     default : ""
@@ -27,5 +28,10 @@ export const usersAtomFamily = atomFamily({
 
     }})
 
+});
+
+export const userId = atom({
+    key : "userId",
+    default : ""
 });
 

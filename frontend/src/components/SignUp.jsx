@@ -1,13 +1,13 @@
 import { useRecoilState } from "recoil"
 import axios from "axios";
 import { signUpAtom } from "../store/signUp"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function SignUp() {
 const[signup , setSignupValue] = useRecoilState(signUpAtom)
 const navigate = useNavigate();
     return (
-        <div>
+        <div >
             <h1>Sign Up</h1>
             <h4>Enter your information to create an account</h4>
             <h4>First Name</h4>
@@ -52,7 +52,7 @@ const navigate = useNavigate();
                     alert(e);
                 })
             }}>Sign Up</button>
-            <h5>Already have an account?<a href="http://localhost:3000/api/vi/user/signin">SignIn</a> </h5>
+            <h5>Already have an account?<Link to= "/signin">SignIn</Link> </h5>
         </div>
     )
 }
