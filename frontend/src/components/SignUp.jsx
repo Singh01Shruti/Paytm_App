@@ -39,7 +39,7 @@ const navigate = useNavigate();
                     password: e.target.value
                 }))
             }}></input>
-            <button className = "bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 rounded mt-5 w-72"
+            <button className = "bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 rounded mt-5 w-72"
                 onClick={() => {
                 axios.post("http://localhost:3000/api/vi/user/signup", {
                     username : signup.email,
