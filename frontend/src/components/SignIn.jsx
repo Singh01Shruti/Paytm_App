@@ -40,7 +40,7 @@ const navigate = useNavigate();
                     navigate("/dashboard");   
                 })
             }}>Sign In</button>
-            <h4 className="text-center mt-5 font-semibold">Don't have an account? <Link className="underline" to="/signup">Sign Up</Link></h4>
+            <h4 className="text-center mt-5 font-semibold">Don't have an account? <Link className="underline" to="/">Sign Up</Link></h4>
             </div>
         </div>
     )
